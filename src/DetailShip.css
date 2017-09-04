@@ -1,0 +1,11 @@
+.DetailShip {
+  box-sizing: border-box;
+  padding: 10px;
+  width: 40%;
+}
+.DetailShip img {
+  width: 100%;  
+}
+.DetailShip p {
+  text-align: center;
+}

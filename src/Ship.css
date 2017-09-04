@@ -1,0 +1,12 @@
+.Card {
+  box-sizing: border-box;
+  padding: 10px;
+  display: inline-block;
+  width: 20%;
+}
+.Card img {
+  width: 100%;  
+}
+.Card p {
+  text-align: center;
+}
