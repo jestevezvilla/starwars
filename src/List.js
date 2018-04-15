@@ -1,43 +1,29 @@
+import React from 'react';
+import { connect } from 'react-redux';
 
-import React, { Component } from 'react';
+import { fetchStarWarsRequest } from './actions';
 
 import Ship from './Ship';
 import Loader from './Loader';
 
-class List extends Component {
-  constructor() {
-    super();
-    this.state = {
-      loading: true,
-      ships: []
-    }
-  }
+const List = props => {
+  const { fetchStarWarsRequest, people = [], loading } = props;
+  console.log(props);
+  return (
+    <div>
+      <button onClick={fetchStarWarsRequest}>Click</button>
+      <Loader active={loading} />
+      {people.map(ship => <Ship key={ship.name} ship={ship} />)}
+    </div>
+  );
+};
 
-  componentDidMount() {
-    fetch('https://swapi.co/api/starships')
-      .then((response) => response.json())
-      .then(({ results: items }) => this.handlePromise(items));
-  }
+const mapStateToProps = ({ peopleSuccess }) => {
+  return { people: peopleSuccess.people };
+};
 
-  handlePromise(ships) {
-    this.setState({ ships, loading: false })
-  }
+const bindActionsToDispatch = dispatch => ({
+  fetchStarWarsRequest: () => dispatch(fetchStarWarsRequest()),
+});
 
-  componentWillUnmount() {
-    this.handlePromise = () => console.log('unmounted component');
-  }
-
-  render() {
-    const { ships, loading } = this.state;
-    return (
-      <div>
-        <Loader active={loading} />
-        {ships.map((ship) =>
-          <Ship key={ship.name} ship={ship} />
-        )}
-      </div>
-    );
-  }
-}
-
-export default List;
+export default connect(mapStateToProps, bindActionsToDispatch)(List);
