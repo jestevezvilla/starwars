@@ -1,17 +1,22 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
+import { compose, withState, withHandlers } from "recompose";
 
-import { fetchStarWarsRequest } from './actions';
+import { confirmFetch, fetchStarWarsRequest } from "./actions";
 
-import Ship from './Ship';
-import Loader from './Loader';
+import Ship from "./Ship";
+import Loader from "./Loader";
 
 const List = props => {
-  const { fetchStarWarsRequest, people = [], loading } = props;
-  console.log(props);
+  const { confirmFetch, onFetchClick, open, people, loading } = props;
   return (
     <div>
-      <button onClick={fetchStarWarsRequest}>Click</button>
+      <div
+        style={{ position: "absolute", display: `${open ? "block" : "none"}` }}
+      >
+        <button onClick={confirmFetch}>Confirm</button>
+      </div>
+      <button onClick={onFetchClick}>Click</button>
       <Loader active={loading} />
       {people.map(ship => <Ship key={ship.name} ship={ship} />)}
     </div>
@@ -24,6 +29,18 @@ const mapStateToProps = ({ peopleSuccess }) => {
 
 const bindActionsToDispatch = dispatch => ({
   fetchStarWarsRequest: () => dispatch(fetchStarWarsRequest()),
+  confirmFetch: () => dispatch(confirmFetch())
 });
 
-export default connect(mapStateToProps, bindActionsToDispatch)(List);
+const connectedList = connect(mapStateToProps, bindActionsToDispatch);
+
+export default compose(
+  connectedList,
+  withState("open", "handleOpen", false),
+  withHandlers({
+    onFetchClick: props => () => {
+      props.handleOpen(true);
+      props.fetchStarWarsRequest();
+    }
+  })
+)(List);
