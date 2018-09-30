@@ -1,9 +1,9 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 
-import { FETCH_STAR_WARS_SUCCESS } from "./types";
+import { FETCH_STAR_WARS_SUCCESS } from './types';
 
 const initialState = {
-  people: []
+  people: [],
 };
 
 const peopleSuccess = (state = initialState, action) => {
@@ -11,7 +11,7 @@ const peopleSuccess = (state = initialState, action) => {
     case FETCH_STAR_WARS_SUCCESS:
       return {
         ...state,
-        people: action.data
+        people: action.data,
       };
 
     default:
